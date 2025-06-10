@@ -1,12 +1,15 @@
-
 import React, { useState } from 'react';
 import ProductCard from './ProductCard';
+import Cart from './Cart';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/types/Product';
-import { Sparkles, Filter } from 'lucide-react';
+import { Sparkles, Filter, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/hooks/useCart';
 
 const ProductCatalog: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('todos');
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { getTotalItems } = useCart();
 
   const products: Product[] = [
     {
@@ -78,12 +81,29 @@ const ProductCatalog: React.FC = () => {
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-6">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2 flex items-center justify-center gap-2">
-              <Sparkles className="w-8 h-8 text-pink-500" />
-              Arte Feminina
-            </h1>
-            <p className="text-gray-600 text-lg">Produtos artesanais únicos, feitos especialmente para você</p>
+          <div className="flex items-center justify-between">
+            <div className="text-center flex-1">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2 flex items-center justify-center gap-2">
+                <Sparkles className="w-8 h-8 text-pink-500" />
+                Arte Feminina
+              </h1>
+              <p className="text-gray-600 text-lg">Produtos artesanais únicos, feitos especialmente para você</p>
+            </div>
+            
+            <div className="relative">
+              <Button
+                onClick={() => setIsCartOpen(true)}
+                className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-medium px-6 py-3 rounded-full flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                Carrinho
+                {getTotalItems() > 0 && (
+                  <span className="bg-white text-pink-600 rounded-full w-6 h-6 text-xs font-bold flex items-center justify-center">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -147,6 +167,8 @@ const ProductCatalog: React.FC = () => {
           </Button>
         </div>
       </div>
+
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
   );
 };

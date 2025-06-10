@@ -2,19 +2,32 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, MessageCircle } from 'lucide-react';
+import { Heart, MessageCircle, ShoppingCart } from 'lucide-react';
 import { Product } from '@/types/Product';
+import { useCart } from '@/hooks/useCart';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductCardProps {
   product: Product;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
   const handleWhatsAppClick = () => {
     const message = `Olá! Tenho interesse no produto: ${product.name} - R$ ${product.price.toFixed(2)}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://api.whatsapp.com/send?phone=5541991626645&text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
+  };
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    toast({
+      title: "Produto adicionado!",
+      description: `${product.name} foi adicionado ao carrinho.`,
+    });
   };
 
   return (
@@ -54,14 +67,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {product.description}
         </p>
         
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <span className="text-2xl font-bold text-pink-600">
             R$ {product.price.toFixed(2)}
           </span>
+        </div>
+
+        <div className="flex gap-2">
+          <Button
+            onClick={handleAddToCart}
+            className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-medium py-2 rounded-full flex items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl"
+          >
+            <ShoppingCart className="w-4 h-4" />
+            Carrinho
+          </Button>
           
           <Button
             onClick={handleWhatsAppClick}
-            className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium px-4 py-2 rounded-full flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl"
+            variant="outline"
+            className="flex-1 border-green-500 text-green-600 hover:bg-green-50 font-medium py-2 rounded-full flex items-center justify-center gap-2 transition-all duration-300"
           >
             <MessageCircle className="w-4 h-4" />
             WhatsApp
