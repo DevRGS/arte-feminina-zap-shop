@@ -1,6 +1,12 @@
+
 import React, { useState } from 'react';
 import ProductCard from './ProductCard';
 import Cart from './Cart';
+import FeaturedBanner from './FeaturedBanner';
+import PopularProducts from './PopularProducts';
+import ProductVideos from './ProductVideos';
+import InstagramSection from './InstagramSection';
+import LocationSection from './LocationSection';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/types/Product';
 import { Sparkles, Filter, ShoppingCart } from 'lucide-react';
@@ -109,6 +115,12 @@ const ProductCatalog: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Featured Banner */}
+        <FeaturedBanner />
+
+        {/* Popular Products */}
+        <PopularProducts />
+
         {/* Category Filter */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
@@ -134,17 +146,26 @@ const ProductCatalog: React.FC = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {filteredProducts.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
         {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
+          <div className="text-center py-12 mb-16">
             <p className="text-gray-500 text-lg">Nenhum produto encontrado nesta categoria.</p>
           </div>
         )}
+
+        {/* Product Videos */}
+        <ProductVideos />
+
+        {/* Instagram Section */}
+        <InstagramSection />
+
+        {/* Location Section */}
+        <LocationSection />
 
         {/* Footer */}
         <div className="mt-16 text-center bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-pink-100">
