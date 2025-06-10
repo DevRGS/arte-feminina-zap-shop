@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ProductCard from './ProductCard';
 import Cart from './Cart';
@@ -7,6 +6,9 @@ import PopularProducts from './PopularProducts';
 import ProductVideos from './ProductVideos';
 import InstagramSection from './InstagramSection';
 import LocationSection from './LocationSection';
+import Footer from './Footer';
+import ParallaxSection from './ParallaxSection';
+import ParallaxDivider from './ParallaxDivider';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/types/Product';
 import { Sparkles, Filter, ShoppingCart } from 'lucide-react';
@@ -116,78 +118,82 @@ const ProductCatalog: React.FC = () => {
 
       <div className="container mx-auto px-4 py-8">
         {/* Featured Banner */}
-        <FeaturedBanner />
+        <ParallaxSection speed={0.2}>
+          <FeaturedBanner />
+        </ParallaxSection>
+
+        <ParallaxDivider pattern="waves" />
 
         {/* Popular Products */}
-        <PopularProducts />
+        <ParallaxSection speed={0.1}>
+          <PopularProducts />
+        </ParallaxSection>
+
+        <ParallaxDivider pattern="geometric" />
 
         {/* Category Filter */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <Filter className="w-5 h-5 text-gray-600" />
-            <span className="font-medium text-gray-700">Filtrar por categoria:</span>
+        <ParallaxSection speed={0.15}>
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Filter className="w-5 h-5 text-gray-600" />
+              <span className="font-medium text-gray-700">Filtrar por categoria:</span>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {categories.map(category => (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`rounded-full transition-all duration-300 ${
+                    selectedCategory === category.id 
+                      ? 'bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600' 
+                      : 'border-pink-200 text-gray-700 hover:bg-pink-50'
+                  }`}
+                >
+                  {category.name}
+                </Button>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-3">
-            {categories.map(category => (
-              <Button
-                key={category.id}
-                variant={selectedCategory === category.id ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`rounded-full transition-all duration-300 ${
-                  selectedCategory === category.id 
-                    ? 'bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600' 
-                    : 'border-pink-200 text-gray-700 hover:bg-pink-50'
-                }`}
-              >
-                {category.name}
-              </Button>
+
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
-        </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {filteredProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+          {filteredProducts.length === 0 && (
+            <div className="text-center py-12 mb-16">
+              <p className="text-gray-500 text-lg">Nenhum produto encontrado nesta categoria.</p>
+            </div>
+          )}
+        </ParallaxSection>
 
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12 mb-16">
-            <p className="text-gray-500 text-lg">Nenhum produto encontrado nesta categoria.</p>
-          </div>
-        )}
+        <ParallaxDivider pattern="dots" />
 
         {/* Product Videos */}
-        <ProductVideos />
+        <ParallaxSection speed={0.1}>
+          <ProductVideos />
+        </ParallaxSection>
+
+        <ParallaxDivider pattern="waves" />
 
         {/* Instagram Section */}
-        <InstagramSection />
+        <ParallaxSection speed={0.15}>
+          <InstagramSection />
+        </ParallaxSection>
+
+        <ParallaxDivider pattern="geometric" />
 
         {/* Location Section */}
-        <LocationSection />
-
-        {/* Footer */}
-        <div className="mt-16 text-center bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-pink-100">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-            Tem alguma dúvida sobre nossos produtos?
-          </h3>
-          <p className="text-gray-600 mb-6">
-            Entre em contato conosco pelo WhatsApp e tire todas as suas dúvidas!
-          </p>
-          <Button
-            onClick={() => {
-              const message = "Olá! Gostaria de saber mais sobre os produtos artesanais.";
-              const encodedMessage = encodeURIComponent(message);
-              const whatsappUrl = `https://api.whatsapp.com/send?phone=5541991626645&text=${encodedMessage}`;
-              window.open(whatsappUrl, '_blank');
-            }}
-            className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium px-8 py-3 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            Falar no WhatsApp
-          </Button>
-        </div>
+        <ParallaxSection speed={0.1}>
+          <LocationSection />
+        </ParallaxSection>
       </div>
+
+      {/* Footer */}
+      <Footer />
 
       <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>

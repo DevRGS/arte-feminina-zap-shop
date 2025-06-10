@@ -1,11 +1,13 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Play, ChevronLeft, ChevronRight, Video } from 'lucide-react';
+import { Play, Pause, ChevronLeft, ChevronRight, Video } from 'lucide-react';
 
 const ProductVideos: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const videoSlides = [
     {
@@ -13,54 +15,43 @@ const ProductVideos: React.FC = () => {
       title: 'Colar Dourado em Uso',
       description: 'Veja como fica elegante no dia a dia',
       thumbnail: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=600&h=400&fit=crop',
-      images: [
-        'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=600&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&h=400&fit=crop'
-      ]
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
     },
     {
       id: 2,
       title: 'Almofada Decorativa',
       description: 'Transformando ambientes com charme',
       thumbnail: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=600&h=400&fit=crop',
-      images: [
-        'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=600&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1558618666-fbd0c44cd2e4?w=600&h=400&fit=crop'
-      ]
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
     },
     {
       id: 3,
       title: 'Bolsa de Crochê',
       description: 'Estilo e praticidade para o dia a dia',
       thumbnail: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=600&h=400&fit=crop',
-      images: [
-        'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=600&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=600&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop'
-      ]
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
     }
   ];
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % videoSlides.length);
-    setCurrentImageIndex(0);
+    setIsPlaying(false);
   };
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + videoSlides.length) % videoSlides.length);
-    setCurrentImageIndex(0);
+    setIsPlaying(false);
   };
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % videoSlides[currentSlide].images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + videoSlides[currentSlide].images.length) % videoSlides[currentSlide].images.length);
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
   };
 
   const currentVideo = videoSlides[currentSlide];
@@ -83,53 +74,43 @@ const ProductVideos: React.FC = () => {
         <Card className="overflow-hidden shadow-2xl">
           <CardContent className="p-0">
             <div className="relative">
-              <div className="relative h-96 overflow-hidden">
-                <img
-                  src={currentVideo.images[currentImageIndex]}
-                  alt={currentVideo.title}
-                  className="w-full h-full object-cover transition-transform duration-500"
+              <div className="relative h-96 overflow-hidden bg-black">
+                <video
+                  ref={videoRef}
+                  src={currentVideo.videoUrl}
+                  poster={currentVideo.thumbnail}
+                  className="w-full h-full object-cover"
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  controls={false}
                 />
                 
-                {/* Image Navigation */}
+                {/* Video Controls */}
                 <Button
-                  onClick={prevImage}
+                  onClick={prevSlide}
                   className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 p-0"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </Button>
                 <Button
-                  onClick={nextImage}
+                  onClick={nextSlide}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 p-0"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </Button>
 
-                {/* Play Button Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                {/* Play/Pause Button */}
+                <div className="absolute inset-0 flex items-center justify-center">
                   <Button
-                    className="bg-white/90 hover:bg-white text-pink-600 rounded-full w-16 h-16 p-0 shadow-xl"
-                    onClick={() => {
-                      const message = `Olá! Gostaria de saber mais sobre: ${currentVideo.title}`;
-                      const encodedMessage = encodeURIComponent(message);
-                      const whatsappUrl = `https://api.whatsapp.com/send?phone=5541991626645&text=${encodedMessage}`;
-                      window.open(whatsappUrl, '_blank');
-                    }}
+                    onClick={togglePlayPause}
+                    className="bg-white/90 hover:bg-white text-pink-600 rounded-full w-16 h-16 p-0 shadow-xl transition-all duration-300"
                   >
-                    <Play className="w-8 h-8 fill-current" />
+                    {isPlaying ? (
+                      <Pause className="w-8 h-8 fill-current" />
+                    ) : (
+                      <Play className="w-8 h-8 fill-current" />
+                    )}
                   </Button>
-                </div>
-
-                {/* Image Indicators */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                  {currentVideo.images.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                      }`}
-                    />
-                  ))}
                 </div>
               </div>
 
@@ -173,7 +154,7 @@ const ProductVideos: React.FC = () => {
               key={video.id}
               onClick={() => {
                 setCurrentSlide(index);
-                setCurrentImageIndex(0);
+                setIsPlaying(false);
               }}
               className={`relative w-20 h-14 rounded-lg overflow-hidden transition-all duration-300 ${
                 index === currentSlide ? 'ring-2 ring-pink-500 scale-110' : 'opacity-60 hover:opacity-100'

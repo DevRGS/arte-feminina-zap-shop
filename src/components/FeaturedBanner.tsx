@@ -29,7 +29,7 @@ const FeaturedBanner: React.FC = () => {
             <Button 
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-pink-600 font-semibold px-8 py-4 text-lg rounded-full transition-all duration-300"
+              className="border-2 border-white text-white bg-white/10 hover:bg-white hover:text-pink-600 font-semibold px-8 py-4 text-lg rounded-full transition-all duration-300 backdrop-blur-sm"
               onClick={() => {
                 const message = "Olá! Gostaria de conhecer a coleção especial de produtos artesanais.";
                 const encodedMessage = encodeURIComponent(message);
