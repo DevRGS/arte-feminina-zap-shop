@@ -9,25 +9,28 @@ interface ParallaxSectionProps {
 
 const ParallaxSection: React.FC<ParallaxSectionProps> = ({ 
   children, 
-  speed = 0.5, 
+  speed = 0.1, 
   className = '' 
 }) => {
   const [offsetY, setOffsetY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setOffsetY(window.pageYOffset);
+      const scrolled = window.pageYOffset;
+      // Efeito muito mais suave
+      setOffsetY(scrolled * speed * 0.3);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [speed]);
 
   return (
     <div 
       className={`relative ${className}`}
       style={{
-        transform: `translateY(${offsetY * speed}px)`,
+        transform: `translateY(${offsetY}px)`,
+        transition: 'transform 0.1s ease-out'
       }}
     >
       {children}

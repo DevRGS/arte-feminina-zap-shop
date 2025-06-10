@@ -9,6 +9,7 @@ import LocationSection from './LocationSection';
 import Footer from './Footer';
 import ParallaxSection from './ParallaxSection';
 import ParallaxDivider from './ParallaxDivider';
+import StarField from './StarField';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/types/Product';
 import { Sparkles, Filter, ShoppingCart } from 'lucide-react';
@@ -85,9 +86,12 @@ const ProductCatalog: React.FC = () => {
     : products.filter(product => product.category === selectedCategory);
 
   return (
-    <div className="min-h-screen gradient-pink">
+    <div className="min-h-screen gradient-pink relative">
+      {/* Star Field Background */}
+      <StarField />
+
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-10">
+      <div className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-20">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="text-center flex-1">
@@ -116,23 +120,23 @@ const ProductCatalog: React.FC = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Featured Banner */}
-        <ParallaxSection speed={0.2}>
+        <ParallaxSection speed={0.05}>
           <FeaturedBanner />
         </ParallaxSection>
 
         <ParallaxDivider pattern="waves" />
 
         {/* Popular Products */}
-        <ParallaxSection speed={0.1}>
+        <ParallaxSection speed={0.03}>
           <PopularProducts />
         </ParallaxSection>
 
         <ParallaxDivider pattern="geometric" />
 
         {/* Category Filter */}
-        <ParallaxSection speed={0.15}>
+        <ParallaxSection speed={0.04}>
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <Filter className="w-5 h-5 text-gray-600" />
@@ -157,14 +161,14 @@ const ProductCatalog: React.FC = () => {
           </div>
 
           {/* Products Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {filteredProducts.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
           {filteredProducts.length === 0 && (
-            <div className="text-center py-12 mb-16">
+            <div className="text-center py-12 mb-12">
               <p className="text-gray-500 text-lg">Nenhum produto encontrado nesta categoria.</p>
             </div>
           )}
@@ -173,27 +177,33 @@ const ProductCatalog: React.FC = () => {
         <ParallaxDivider pattern="dots" />
 
         {/* Product Videos */}
-        <ParallaxSection speed={0.1}>
-          <ProductVideos />
+        <ParallaxSection speed={0.02}>
+          <div className="mb-8">
+            <ProductVideos />
+          </div>
         </ParallaxSection>
 
-        <ParallaxDivider pattern="waves" />
-
         {/* Instagram Section */}
-        <ParallaxSection speed={0.15}>
-          <InstagramSection />
+        <ParallaxSection speed={0.03}>
+          <div className="mb-8">
+            <InstagramSection />
+          </div>
         </ParallaxSection>
 
         <ParallaxDivider pattern="geometric" />
 
         {/* Location Section */}
-        <ParallaxSection speed={0.1}>
-          <LocationSection />
+        <ParallaxSection speed={0.02}>
+          <div className="mb-8">
+            <LocationSection />
+          </div>
         </ParallaxSection>
       </div>
 
-      {/* Footer */}
-      <Footer />
+      {/* Footer - sem z-index conflitante */}
+      <div className="relative z-10">
+        <Footer />
+      </div>
 
       <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
