@@ -7,6 +7,7 @@ import { Play, Pause, Video } from 'lucide-react';
 const ProductVideos: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showControls, setShowControls] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const videoSlides = [
@@ -44,6 +45,20 @@ const ProductVideos: React.FC = () => {
     }
   };
 
+  const handleVideoClick = () => {
+    setShowControls(true);
+  };
+
+  const handlePlay = () => {
+    setIsPlaying(true);
+    setShowControls(false);
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+    setShowControls(true);
+  };
+
   const currentVideo = videoSlides[currentSlide];
 
   return (
@@ -69,14 +84,19 @@ const ProductVideos: React.FC = () => {
                   ref={videoRef}
                   src={currentVideo.videoUrl}
                   poster={currentVideo.thumbnail}
-                  className="w-full h-full object-cover"
-                  onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
+                  className="w-full h-full object-cover cursor-pointer"
+                  onPlay={handlePlay}
+                  onPause={handlePause}
+                  onClick={handleVideoClick}
                   controls={false}
                 />
 
                 {/* Play/Pause Button */}
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div 
+                  className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
+                    showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
+                >
                   <Button
                     onClick={togglePlayPause}
                     className="bg-white/90 hover:bg-white text-pink-600 rounded-full w-16 h-16 p-0 shadow-xl transition-all duration-300"
@@ -112,6 +132,7 @@ const ProductVideos: React.FC = () => {
               onClick={() => {
                 setCurrentSlide(index);
                 setIsPlaying(false);
+                setShowControls(true);
               }}
               className={`relative w-20 h-14 rounded-lg overflow-hidden transition-all duration-300 ${
                 index === currentSlide ? 'ring-2 ring-pink-500 scale-110' : 'opacity-60 hover:opacity-100'
