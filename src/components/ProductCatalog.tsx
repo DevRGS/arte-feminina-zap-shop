@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import ProductCard from './ProductCard';
 import Cart from './Cart';
@@ -91,7 +92,7 @@ const ProductCatalog: React.FC = () => {
       <StarField />
 
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-20">
+      <div className="bg-white/80 backdrop-blur-sm border-b border-pink-100 z-20">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="text-center flex-1">

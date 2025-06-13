@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Play, Pause, ChevronLeft, ChevronRight, Video } from 'lucide-react';
+import { Play, Pause, Video } from 'lucide-react';
 
 const ProductVideos: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -32,16 +32,6 @@ const ProductVideos: React.FC = () => {
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
     }
   ];
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % videoSlides.length);
-    setIsPlaying(false);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + videoSlides.length) % videoSlides.length);
-    setIsPlaying(false);
-  };
 
   const togglePlayPause = () => {
     if (videoRef.current) {
@@ -84,20 +74,6 @@ const ProductVideos: React.FC = () => {
                   onPause={() => setIsPlaying(false)}
                   controls={false}
                 />
-                
-                {/* Video Controls */}
-                <Button
-                  onClick={prevSlide}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 p-0"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </Button>
-                <Button
-                  onClick={nextSlide}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 p-0"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </Button>
 
                 {/* Play/Pause Button */}
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -115,32 +91,13 @@ const ProductVideos: React.FC = () => {
               </div>
 
               <div className="p-6 bg-gradient-to-r from-pink-50 to-purple-50">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                      {currentVideo.title}
-                    </h3>
-                    <p className="text-gray-600">
-                      {currentVideo.description}
-                    </p>
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={prevSlide}
-                      variant="outline"
-                      className="rounded-full w-10 h-10 p-0"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </Button>
-                    <Button
-                      onClick={nextSlide}
-                      variant="outline"
-                      className="rounded-full w-10 h-10 p-0"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </Button>
-                  </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                    {currentVideo.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {currentVideo.description}
+                  </p>
                 </div>
               </div>
             </div>
