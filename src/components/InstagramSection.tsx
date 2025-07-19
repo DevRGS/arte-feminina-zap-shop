@@ -28,7 +28,7 @@ const InstagramSection: React.FC = () => {
           Acompanhe nosso dia a dia e veja mais produtos incríveis no nosso Instagram!
         </p>
         <Button
-          onClick={() => window.open('https://instagram.com/artefeminina_store', '_blank')}
+          onClick={() => window.open('https://www.instagram.com/lossantosrafael/', '_blank')}
           className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300"
         >
           @artefeminina_store
