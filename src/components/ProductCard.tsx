@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleWhatsAppClick = () => {
     const message = `Olá! Tenho interesse no produto: ${product.name} - R$ ${product.price.toFixed(2)}`;
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=5541991626645&text=${encodedMessage}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=5541999999999&text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
   };
 
